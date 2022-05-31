@@ -28,6 +28,7 @@ IF "%environment%" == "" (
   ECHO An environment is required.
   GOTO environmentPrompt
 )
+set dockerName=%environment: =_%
 
 @REM If the image could not be found, let's create one.
 FOR /f %%i in ('docker container ls -aqf "name=^%environment%"') do set containerId=%%i
@@ -38,10 +39,10 @@ FOR /f %%i in ('docker container ls -aqf "name=^%environment%"') do set containe
     ECHO Creating the container...
     docker run^
       -v %cd%:/project^
-      -e ENVIRONMENT=%environment%^
-      --name %environment%^
-      -it %dockerImage%^
-      /bin/create.sh
+      -e ENVIRONMENT="%environment%"^
+      --name "%dockerName%"^
+      -it "%dockerImage%"^
+      /bin/start.sh
     EXIT
   )
 )
@@ -53,6 +54,6 @@ docker start %environment% > nul
 
 ECHO Attaching to container...
 docker exec^
-  -e ENVIRONMENT=%environment%^
-  -it %environment%^
+  -e ENVIRONMENT="%environment%"^
+  -it "%dockerName%"^
   /bin/start.sh
