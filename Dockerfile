@@ -31,6 +31,9 @@ ENV LANG=en_US.UTF-8
 ENV LANGUAGE=en_US.UTF-8
 ENV LC_ALL=en_US.UTF-8
 
+# Disable warnings for the SFDX version.
+RUN echo "{}" > /root/.cache/sfdx/version
+
 # Copy all scripts we want to keep.
 COPY bin /bin
 RUN find /bin -type f -exec chmod +x {} \;
